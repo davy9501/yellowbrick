@@ -26,8 +26,6 @@ To Include:
 import numpy as np
 import matplotlib.pyplot as plt
 
-from yellowbrick.utils import is_dataframe
-from yellowbrick.utils import is_structured_array
 from .base import MissingDataVisualizer
 
 # from yellowbrick.style.colors import resolve_colors
@@ -43,11 +41,13 @@ class MissingValuesBar(MissingDataVisualizer):
     """
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, width=0.5, color='black', **kwargs):
         """
         """
 
         super(MissingValuesBar, self).__init__(**kwargs)
+        self.width = width  # the width of the bars
+        self.color = color  # the color of the bars
 
     def get_nan_col_counts(self, **kwargs):
         nan_matrix = self.X.astype(np.float)
@@ -61,11 +61,10 @@ class MissingValuesBar(MissingDataVisualizer):
         """
         nan_col_counts = self.get_nan_col_counts()
 
-        width = 0.5  # the width of the bars
         self.ind = np.arange(len(self.features_))  # the x locations for the groups
 
-        self.ax.barh(self.ind - width / 2, nan_col_counts, width,
-                        color='black')
+        self.ax.barh(self.ind - self.width / 2, nan_col_counts, self.width,
+                        color=self.color)
 
     def finalize(self, **kwargs):
         """
